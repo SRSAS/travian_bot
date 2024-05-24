@@ -6,7 +6,7 @@ from selenium.webdriver.support import expected_conditions as EC
 import time
 
 TRAVIAN_URL = 'https://ts4.x1.international.travian.com'
-NUMBER_OF_FARMLISTS = 4
+NUMBER_OF_FARMLISTS = 2
 
 def get_travian_login_info():
     with open('travian_login_info.txt', 'r') as login_file:
