@@ -1,11 +1,5 @@
 import mysql.connector
 from utils import logger
-from selenium_utils import INTERNATIONAL_5, EUROPE_100
-
-canonical_server_names = {
-    INTERNATIONAL_5: "INTERNATIONAL_5",
-    EUROPE_100: "EUROPE_100"
-}
 
 
 def table_matches_columns(cursor, database, table, columns):

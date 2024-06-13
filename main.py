@@ -2,7 +2,6 @@ from utils import *
 from selenium_utils import *
 
 
-
 @log_execution_time
 def main():
     selenium_manager = SeleniumManager()

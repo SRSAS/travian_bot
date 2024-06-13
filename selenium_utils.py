@@ -10,18 +10,20 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium import webdriver
 
 from utils import retry, logger, log_execution_time
-from db_utils import get_login_info, canonical_server_names
+from db_utils import get_login_info
 
 WAIT_TIME = 4
 
-EUROPE_4 = 'Europe 4'
-EUROPE_100 = 'Europe 100'
-INTERNATIONAL_4 = 'International 4'
 INTERNATIONAL_5 = 'International 5'
-EUROPE_4_URL = 'https://ts4.x1.europe.travian.com'
-EUROPE_100_URL = 'https://ts100.x10.europe.travian.com'
-INTERNATIONAL_4_URL = 'https://ts4.x1.international.travian.com'
+EUROPE_100 = 'Europe 100'
+
 INTERNATIONAL_5_URL = 'https://ts5.x1.international.travian.com'
+EUROPE_100_URL = 'https://ts100.x10.europe.travian.com'
+
+canonical_server_names = {
+    INTERNATIONAL_5: "INTERNATIONAL_5",
+    EUROPE_100: "EUROPE_100"
+}
 
 
 # Page names
@@ -212,7 +214,7 @@ class SeleniumManager:
             INTERNATIONAL_5: None
         }
         self.waits = {
-            EUROPE_4: None,
+            EUROPE_100: None,
             INTERNATIONAL_5: None
         }
         self.is_logged_in = {
