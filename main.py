@@ -1,7 +1,6 @@
-from bs4 import BeautifulSoup
-from selenium import webdriver
 from utils import *
 from selenium_utils import *
+
 
 
 @log_execution_time

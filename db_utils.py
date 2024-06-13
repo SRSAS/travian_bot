@@ -1,4 +1,11 @@
+import mysql.connector
 from utils import logger
+from selenium_utils import INTERNATIONAL_5, EUROPE_100
+
+canonical_server_names = {
+    INTERNATIONAL_5: "INTERNATIONAL_5",
+    EUROPE_100: "EUROPE_100"
+}
 
 
 def table_matches_columns(cursor, database, table, columns):
@@ -115,3 +122,19 @@ def is_empty(cursor, database, table_name):
     cursor.execute(f"USE {database}")
     cursor.execute(f"SELECT * FROM {table_name}")
     return bool(cursor.fetchall())
+
+
+def get_login_info(server):
+    db_user, db_password = get_database_credentials()
+    conn = mysql.connector.connect(
+        host="localhost",
+        user=db_user,
+        password=db_password,
+    )
+
+    cursor = conn.cursor()
+    cursor.execute("USE travian_login_info")
+    cursor.execute(f"SELECT * FROM info WHERE server = '{server}'")
+
+    credentials = cursor.fetchone()
+    return credentials[0], credentials[1]

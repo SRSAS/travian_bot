@@ -10,14 +10,14 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium import webdriver
 
 from utils import retry, logger, log_execution_time
-from db_utils import get_database_credentials
+from db_utils import get_login_info, canonical_server_names
 
 WAIT_TIME = 4
 
-EUROPE_4 = 'EUROPE_4'
-EUROPE_100 = 'EUROPE_100'
-INTERNATIONAL_4 = 'INTERNATIONAL_4'
-INTERNATIONAL_5 = 'INTERNATIONAL_5'
+EUROPE_4 = 'Europe 4'
+EUROPE_100 = 'Europe 100'
+INTERNATIONAL_4 = 'International 4'
+INTERNATIONAL_5 = 'International 5'
 EUROPE_4_URL = 'https://ts4.x1.europe.travian.com'
 EUROPE_100_URL = 'https://ts100.x10.europe.travian.com'
 INTERNATIONAL_4_URL = 'https://ts4.x1.international.travian.com'
@@ -36,7 +36,7 @@ class PageNames(Enum):
     FARM_LIST = 8
 
 
-URL_SUFFIXES = {
+url_suffixes = {
     PageNames.RESOURCES: 'dorf1.php',
     PageNames.BUILDINGS: 'dorf2.php',
     PageNames.MAP: 'karte.php',
@@ -172,21 +172,6 @@ def get_value(row, col):
     return row.find_element(By.XPATH, f'./td[{col}]').text
 
 
-def get_login_info(server):
-    db_user, db_password = get_database_credentials()
-    conn = mysql.connector.connect(
-        host="localhost",
-        user=db_user,
-        password=db_password,
-    )
-
-    cursor = conn.cursor()
-    cursor.execute("USE travian_login_info")
-    cursor.execute(f"SELECT * FROM info WHERE server = '{server}'")
-
-    credentials = cursor.fetchone()
-    return credentials[0], credentials[1]
-
 
 @retry
 def get_farm_lists(village_wrapper):
@@ -223,21 +208,15 @@ class SeleniumManager:
 
     def __init__(self):
         self.drivers = {
-            EUROPE_4: None,
             EUROPE_100: None,
-            INTERNATIONAL_4: None,
             INTERNATIONAL_5: None
         }
         self.waits = {
             EUROPE_4: None,
-            EUROPE_100: None,
-            INTERNATIONAL_4: None,
             INTERNATIONAL_5: None
         }
         self.is_logged_in = {
-            EUROPE_4: False,
             EUROPE_100: False,
-            INTERNATIONAL_4: False,
             INTERNATIONAL_5: False
         }
 
@@ -247,14 +226,14 @@ class SeleniumManager:
             logger.error(f"Server {server} not valid")
             return None
 
-        return SeleniumManager.servers[server] + '/' + URL_SUFFIXES[page]
+        return SeleniumManager.servers[server] + '/' + url_suffixes[page]
 
     # PAGE NAVIGATION
     def login(self, server):
         driver = self.get_driver(server)
         if not driver:
             return
-        username, password = get_login_info(server)
+        username, password = get_login_info(canonical_server_names[server])
 
         name_field = driver.find_element(By.NAME, 'name')
         password_field = driver.find_element(By.NAME, 'password')

@@ -99,16 +99,15 @@ class Menu:
                     self.options[option]()
                 elif option_num == 0:
                     return
+                else:
+                    self.display_usage()
             else:
                 if option == 'quit':
                     return
-                for opt in self.options:
-                    if opt.name == option:
-                        opt()
-                        break
-                continue
-
-            self.display_usage()
+                elif option in self.options.keys():
+                    self.options[option]()
+                else:
+                    self.display_usage()
 
     def add_option(self, option_name, option_command):
         self.options[option_name] = option_command
