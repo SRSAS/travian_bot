@@ -106,8 +106,8 @@ def load_table(cursor, table_name, table_columns, entries):
         insert_into(cursor, table_name, table_columns, entry)
 
 
-def load_table_if_empty(cursor, table_name, table_columns, entries):
-    if is_empty(cursor, table_name):
+def load_table_if_empty(cursor, database, table_name, table_columns, entries):
+    if is_empty(cursor, database, table_name):
         load_table(cursor, table_name, table_columns, entries)
     logger.info(f"Table {table_name} already has entries")
 

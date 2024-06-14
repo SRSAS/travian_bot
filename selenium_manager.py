@@ -1,5 +1,3 @@
-import mysql.connector
-import time
 from enum import Enum
 import re
 
