@@ -2,7 +2,7 @@ import mysql.connector
 import time
 
 from db_utils import *
-from selenium_utils import get_travian_buildings_data, get_travian_troops_data
+from selenium_manager import get_travian_buildings_data, get_travian_troops_data
 
 TRAVIAN_DATABASE_NAME = "travian"
 

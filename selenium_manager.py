@@ -172,7 +172,6 @@ def get_value(row, col):
     return row.find_element(By.XPATH, f'./td[{col}]').text
 
 
-
 @retry
 def get_farm_lists(village_wrapper):
     return village_wrapper.find_elements(By.XPATH, './div[contains(@class, "dropContainer")]/div')
