@@ -77,37 +77,54 @@ class Option:
 
 
 class Menu:
-    def __init__(self, options=None, title=""):
+    def __init__(self, options=None, title="", on_open=None, on_close=None):
         option_list = options or []
         self.options = {}
         for option in option_list:
             self.options[option.name] = option
         self.title = title or ""
 
+        self.on_open = on_open or []
+        self.on_close = on_close or []
+
+        self.running = True
+
     def __str__(self):
         return self.title
 
     def __call__(self, *args, **kwargs):
-        while True:
-            self.display()
-            option = input()
-            if option.isdigit():
-                option_num = int(option)
+        self.open()
+        while self.running:
+            self.process_user_input()
 
-                if 0 < option_num <= len(self.options):
-                    option = list(self.options.keys())[option_num - 1]
-                    self.options[option]()
-                elif option_num == 0:
-                    return
-                else:
-                    self.display_usage()
-            else:
-                if option == 'quit':
-                    return
-                elif option in self.options.keys():
-                    self.options[option]()
-                else:
-                    self.display_usage()
+    def process_user_input(self):
+        self.display()
+
+        option = input()
+        if option.isdigit():
+            self.process_numeric_input(option)
+        else:
+            self.process_string_input(option)
+
+    def process_numeric_input(self, user_input):
+        option_num = int(user_input)
+
+        if 0 < option_num <= len(self.options):
+            option_keys = list(self.options.keys())
+            user_input = option_keys[option_num - 1]
+            self.options[user_input]()
+        elif option_num == 0:
+            self.close()
+        else:
+            Menu.display_invalid_option_warning()
+
+    def process_string_input(self, user_input):
+        if user_input in self.options.keys():
+            self.options[user_input]()
+        elif user_input == 'quit':
+            self.close()
+        else:
+            Menu.display_invalid_option_warning()
 
     def add_option(self, option_name, option_command):
         self.options[option_name] = option_command
@@ -115,10 +132,26 @@ class Menu:
     def remove_option(self, option_name):
         self.options.pop(option_name)
 
-    def display_usage(self):
+    def add_on_open(self, command):
+        self.on_open.append(command)
+
+    def add_on_close(self, command):
+        self.on_close.append(command)
+
+    def open(self):
+        self.running = True
+        for command in self.on_open:
+            command()
+
+    def close(self):
+        self.running = False
+        for command in self.on_close:
+            command()
+
+    @staticmethod
+    def display_invalid_option_warning():
         print("Invalid option.")
         print("Please select an option name or number:")
-        self.display_options()
 
     def display(self):
         print(self.title)

@@ -13,7 +13,8 @@ def main():
                                                                             command=international_5_farming_menu)]
                                 )
     main_menu = Menu(title="Server selection", options=[Option(name=international_5_menu.title,
-                                                               command=international_5_menu)])
+                                                               command=international_5_menu)],
+                     on_close=[as_command(selenium_manager.close_driver, server=INTERNATIONAL_5)])
 
     main_menu()
 
