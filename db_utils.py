@@ -109,13 +109,14 @@ def load_table(cursor, table_name, table_columns, entries):
 def load_table_if_empty(cursor, database, table_name, table_columns, entries):
     if is_empty(cursor, database, table_name):
         load_table(cursor, table_name, table_columns, entries)
-    logger.info(f"Table {table_name} already has entries")
+    else:
+        logger.info(f"Table {table_name} already has entries")
 
 
 def is_empty(cursor, database, table_name):
     cursor.execute(f"USE {database}")
-    cursor.execute(f"SELECT * FROM {table_name}")
-    return bool(cursor.fetchall())
+    cursor.execute(f"SELECT COUNT(*) FROM {table_name}")
+    return cursor.fetchone()[0] == 0
 
 
 def get_login_info(server):
