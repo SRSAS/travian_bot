@@ -8,7 +8,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium import webdriver
 
 from utils import retry, logger, log_execution_time
-from db_utils import get_login_info
+from database.db_utils import get_login_info
 
 WAIT_TIME = 4
 
