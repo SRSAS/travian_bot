@@ -102,12 +102,15 @@ def load_database():
 
     logger.info("Loading database tables")
 
-    load_table_if_empty(cursor, buildings_effect["table_name"], buildings_effect["columns"], effects)
-    load_table_if_empty(cursor, buildings_requirements["table_name"], buildings_requirements["columns"], requirements)
-    load_table_if_empty(cursor, buildings_level_info["table_name"], buildings_level_info["columns"], levels)
+    load_table_if_empty(cursor, TRAVIAN_DATABASE_NAME, buildings_effect["table_name"], buildings_effect["columns"],
+                        effects)
+    load_table_if_empty(cursor, TRAVIAN_DATABASE_NAME, buildings_requirements["table_name"],
+                        buildings_requirements["columns"], requirements)
+    load_table_if_empty(cursor, TRAVIAN_DATABASE_NAME, buildings_level_info["table_name"],
+                        buildings_level_info["columns"], levels)
 
-    load_table_if_empty(cursor, troops_stats["table_name"], troops_stats["columns"], stats)
-    load_table_if_empty(cursor, troops_prices["table_name"], troops_prices["columns"], prices)
+    load_table_if_empty(cursor, TRAVIAN_DATABASE_NAME, troops_stats["table_name"], troops_stats["columns"], stats)
+    load_table_if_empty(cursor, TRAVIAN_DATABASE_NAME, troops_prices["table_name"], troops_prices["columns"], prices)
 
     conn.commit()
 
