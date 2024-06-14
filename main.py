@@ -7,7 +7,7 @@ def main():
     selenium_manager = SM.SeleniumManager()
     international_5_farming_menu = Menu(title=f"{SM.INTERNATIONAL_5}: farming", options=[Option(
         name="Select undefended oases", command=as_command(selenium_manager.select_undefended_oases_farms,
-                                                           server=SM.INTERNATIONAL_5))])
+                                                           threaded=True, server=SM.INTERNATIONAL_5))])
 
     international_5_menu = Menu(title=f"{SM.INTERNATIONAL_5}", options=[Option(name="farming",
                                                                                command=international_5_farming_menu)]
