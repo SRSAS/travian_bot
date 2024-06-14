@@ -73,7 +73,9 @@ def scroll_into_view(driver, element):
 
 
 def get_travian_buildings_data():
-    driver = webdriver.Firefox()
+    options = webdriver.FirefoxOptions()
+    options.add_argument('--headless')
+    driver = webdriver.Firefox(options=options)
     driver.get('http://travian.kirilloid.ru/build.php#mb=1&s=1.45')
 
     requirements = []
@@ -131,7 +133,9 @@ def get_travian_buildings_data():
 
 
 def get_travian_troops_data():
-    driver = webdriver.Firefox()
+    options = webdriver.FirefoxOptions()
+    options.add_argument('--headless')
+    driver = webdriver.Firefox(options=options)
     driver.get('http://travian.kirilloid.ru/troops.php#s=1.45&tribe=1&s_lvl=1&t_lvl=1&unit=1')
 
     table = driver.find_element(By.ID, 'main').find_element(By.TAG_NAME, 'tbody').find_elements(By.TAG_NAME, 'tr')[2:]
