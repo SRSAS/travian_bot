@@ -233,10 +233,16 @@ class SeleniumManager:
 
     # PAGE NAVIGATION
     def login(self, server):
+        logger.info(f"Logging into {server}")
         driver = self.get_driver(server)
+        logger.debug("Driver acquired")
+
         if not driver:
+            logger.error("Could not get driver")
             return
+
         username, password = get_login_info(canonical_server_names[server])
+        logger.info(f"Logging into {username}, with password {password}")
 
         name_field = driver.find_element(By.NAME, 'name')
         password_field = driver.find_element(By.NAME, 'password')
@@ -257,6 +263,8 @@ class SeleniumManager:
             return None
 
         if not self.drivers[server]:
+            logger.info(f"Driver for {server} doesn't exist")
+            logger.info("Creating new driver")
             driver = webdriver.Firefox()
             driver.get(SeleniumManager.servers[server])
             self.drivers[server] = driver
