@@ -50,10 +50,10 @@ troops_prices = {
 
 def setup_database(cursor):
     if not database_exists(cursor, TRAVIAN_DATABASE_NAME):
-        logger.info("Creating travian database")
+        logger.debug("Creating travian database")
         cursor.execute(f"CREATE DATABASE {TRAVIAN_DATABASE_NAME}")
 
-    logger.info("Travian database present")
+    logger.debug("Travian database present")
 
     create_table_if_doesnt_exist(cursor, TRAVIAN_DATABASE_NAME, **buildings_effect)
     create_table_if_doesnt_exist(cursor, TRAVIAN_DATABASE_NAME, **buildings_requirements)
@@ -61,7 +61,7 @@ def setup_database(cursor):
     create_table_if_doesnt_exist(cursor, TRAVIAN_DATABASE_NAME, **troops_stats)
     create_table_if_doesnt_exist(cursor, TRAVIAN_DATABASE_NAME, **troops_prices)
 
-    logger.info("All tables present")
+    logger.debug("All tables present")
 
     buildings_effect_precedences = {"precedences": [buildings_effect, buildings_requirements]}
     troops_stats_precedences = {"precedences": [troops_prices]}
@@ -73,34 +73,26 @@ def setup_database(cursor):
     recreate_table_if_columns_dont_match(cursor, TRAVIAN_DATABASE_NAME, **troops_prices)
     recreate_table_if_columns_dont_match(cursor, TRAVIAN_DATABASE_NAME, **troops_stats, **troops_stats_precedences)
 
-    logger.info("All tables with correct columns present")
+    logger.debug("All tables with correct columns present")
 
 
 def load_database():
     start_time = time.time()
 
-    db_user, db_password = get_database_credentials()
-    logger.info(f"Database user: {db_user}")
-
-    conn = mysql.connector.connect(
-        host="localhost",
-        user=db_user,
-        password=db_password,
-    )
-
+    conn = get_connection_to_database()
     cursor = conn.cursor()
 
-    logger.info("Database connection established")
-    logger.info("Starting database setup")
+    logger.debug("Database connection established")
+    logger.debug("Starting database setup")
 
     setup_database(cursor)
 
-    logger.info("Fetching travian data")
+    logger.debug("Fetching travian data")
 
     effects, requirements, levels = get_travian_buildings_data()
     stats, prices = get_travian_troops_data()
 
-    logger.info("Loading database tables")
+    logger.debug("Loading database tables")
 
     load_table_if_empty(cursor, TRAVIAN_DATABASE_NAME, buildings_effect["table_name"], buildings_effect["columns"],
                         effects)
@@ -116,11 +108,11 @@ def load_database():
 
     cursor.close()
     conn.close()
-    logger.info("Exiting function")
+    logger.debug("Exiting function")
 
     end_time = time.time()
     execution_time = end_time - start_time
-    logger.info(f'Total execution time: {execution_time:4f} seconds')
+    logger.debug(f'Total execution time: {execution_time:4f} seconds')
 
 
 load_database()
