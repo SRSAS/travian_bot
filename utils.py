@@ -5,7 +5,7 @@ import logging
 from datetime import datetime
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-logger = logging.getLogger()
+logger = logging.getLogger("Travian Logger")
 
 executor = concurrent.futures.ThreadPoolExecutor()
 
@@ -162,4 +162,4 @@ class Menu:
         for option in self.options.keys():
             print(f'{option_index} - {str(option)}')
             option_index += 1
-        print(f'{option_index} - quit')
+        print('0 - quit')
